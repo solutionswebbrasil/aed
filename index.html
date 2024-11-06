@@ -48,6 +48,15 @@ body {
   font-weight: 300;
 }
 
+.mobile-menu-btn {
+  display: none;
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
 .nav-menu {
   display: flex;
   gap: 2rem;
@@ -103,18 +112,15 @@ body {
   justify-content: center;
   color: white;
   text-align: center;
+  position: relative;
+  z-index: 1;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
 
 .hero-content h1 {
   font-size: 3.5rem;
   font-weight: 300;
   margin-bottom: 1rem;
-}
-
-.hero-content p {
-  font-size: 1.2rem;
-  max-width: 600px;
-  margin: 0 auto;
 }
 
 .section {
@@ -262,14 +268,32 @@ footer {
 }
 
 @media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: block;
+  }
+
   .nav-menu {
     display: none;
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background: white;
+    padding: 1rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
   }
-  
+
+  .nav-menu.active {
+    display: flex;
+  }
+
   .hero-content h1 {
     font-size: 2.5rem;
   }
-  
+
   .section {
     padding: 3rem 1rem;
   }
@@ -284,6 +308,9 @@ footer {
 <header class="header">
   <nav class="nav-container">
     <a href="/" class="logo">STUDIO A&D</a>
+    <button class="mobile-menu-btn">
+      <i class="fas fa-bars"></i>
+    </button>
     <div class="nav-menu">
       <a href="#projetos" class="nav-link">Projetos</a>
       <a href="#sobre" class="nav-link">Sobre</a>
@@ -299,7 +326,6 @@ footer {
   <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1600566752355-35792bedcfea')"></div>
   <div class="hero-content">
     <h1>Transformando espaços,<br>criando experiências</h1>
-    <p>Design de interiores e arquitetura personalizada para cada cliente</p>
   </div>
 </section>
 
@@ -440,6 +466,32 @@ slides[0].classList.add('active');
 
 // Rotate slides every 5 seconds
 setInterval(nextSlide, 5000);
+
+// Mobile menu toggle
+const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+const navMenu = document.querySelector('.nav-menu');
+
+mobileMenuBtn.addEventListener('click', () => {
+  navMenu.classList.toggle('active');
+});
+
+// Close mobile menu when clicking a link
+document.querySelectorAll('.nav-link').forEach(link => {
+  link.addEventListener('click', () => {
+    if (window.innerWidth <= 768) {
+      navMenu.classList.remove('active');
+    }
+  });
+});
+
+// Close mobile menu when clicking outside
+document.addEventListener('click', (e) => {
+  if (window.innerWidth <= 768 && 
+      !e.target.closest('.nav-menu') && 
+      !e.target.closest('.mobile-menu-btn')) {
+    navMenu.classList.remove('active');
+  }
+});
 </script>
 
 </body>
